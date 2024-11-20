@@ -4,16 +4,21 @@
 
 class UI {
 public:
-	void Render(SDL_Surface* surface) {
-		//MyButton.Render(surface);
-		button.Render(surface);
+
+	//Draw everything to the screen with one class
+	void Render(SDL_Renderer* renderer) {
+		button.Render(renderer);
+		bar.Render(renderer);
 	}
 
+	//Handle everything with one class (this goes in the while(running) {})
 	void HandleEvent(const SDL_Event& e) {
-		//MyButton.HandleEvent(e);
 		button.HandleEvent(e);
 	}
 
-	//Button MyButton{ 50,50,50,50 };
+	//Button MyButton{x position, y position, width, height};
 	DerivedButton button{ 160, 50, 100, 50 };
+
+	//GRAY BAR...
+	Rectangle bar{ 0, 250, 500, 100, {0, 0, 0, 150}};
 };

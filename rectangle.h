@@ -3,26 +3,22 @@
 
 class Rectangle {
 public:
-	Rectangle(int x, int y, int w, int h, SDL_Color color = { 0,0,0,255 }) : rect{ x,y,w,h}, Color {color} {}
+	Rectangle(int x, int y, int w, int h, SDL_Color color = { 0,0,0, 255 }) : rect{ x,y,w,h}, Color {color} {}
 
-	virtual void Render(SDL_Surface* surface) {
-		SDL_FillRect(surface, &rect, SDL_MapRGB(surface->format, Color.r, Color.g, Color.b));
+	virtual void Render(SDL_Renderer* renderer) {
+        //Draw colour
+        SDL_SetRenderDrawColor(renderer, Color.r, Color.g, Color.b, Color.a);
+        
+        //Draw rectangle
+        SDL_RenderFillRect(renderer, &rect);
 	}
 
 	void SetColor(SDL_Color c) { Color = c; }
 
 	//In boundaries from the mouse
     bool IsWithinBounds(int x, int y) const {
-        // Too far left
-        if (x < rect.x) return false;
-        // Too far right
-        if (x > rect.x + rect.w) return false;
-        // Too high
-        if (y < rect.y) return false;
-        // Too low
-        if (y > rect.y + rect.h) return false;
-        // Within bounds
-        return true;
+        return (x >= rect.x && x <= rect.x + rect.w &&
+            y >= rect.y && y <= rect.y + rect.h);
     }
 
 private:

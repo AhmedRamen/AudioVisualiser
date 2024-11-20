@@ -61,3 +61,18 @@ bool OpenAudioFile(const char *fname, SDL_Window* window) {
 
 	return true;
 }
+
+//Audio chunking.
+inline void AudioStreamUpdate() {
+	if (SDL_GetQueuedAudioSize(audio_device) < 8192) {
+		//Get bytes from audio stream
+		const int bytes_remaining = SDL_AudioStreamAvailable(stream);
+		//No more bytes to accumulate, queue more audio?
+		if (bytes_remaining > 0) {
+			const Uint32 new_bytes = SDL_min(bytes_remaining, 32 * 1024);
+			Uint8 convert_buffere[32 * 1024];
+			SDL_AudioStreamGet(stream, convert_buffere, new_bytes);
+			SDL_QueueAudio(audio_device, convert_buffere, new_bytes);
+		}
+	}
+}
