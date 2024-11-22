@@ -21,6 +21,13 @@ public:
             y >= rect.y && y <= rect.y + rect.h);
     }
 
+    //Get x, y, w or h
+    int getX() const { return rect.x; }
+    int getY() const { return rect.y; }
+    int getWidth() const { return rect.w; }
+    int getHeight() const { return rect.h; }
+
+
 private:
 	SDL_Rect rect{ 0,0,0,0 };
 	SDL_Color Color{ 0,0,0,0 };

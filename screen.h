@@ -8,7 +8,9 @@ Uint64 now = SDL_GetPerformanceCounter();
 Uint64 last = 0;
 double deltaTime;
 
-
+//This would save all the trouble if this was seperate.
+SDL_Window* window;
+SDL_Renderer* renderer;
 
 //Panics and stops the program from executing any further
 inline void panic_and_abort(const char* title, const char* text) {
@@ -21,7 +23,7 @@ inline void panic_and_abort(const char* title, const char* text) {
 class Window {
 	public:
 		Window() { 
-			window = SDL_CreateWindow("Hello SDL", 
+			window = SDL_CreateWindow("AudioVisualee", 
 				SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 
 				screen_width, screen_height, 0); 
 			renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC);
@@ -62,8 +64,6 @@ class Window {
 		}
 
 	private:
-		SDL_Window* window;
-		SDL_Renderer* renderer;
-		int screen_width = 500;
-		int screen_height = 300;
+		int screen_width = 600;
+		int screen_height = 400;
 };

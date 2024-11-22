@@ -14,6 +14,7 @@ class Button : public Rectangle {
 			else if (e.type == SDL_MOUSEBUTTONDOWN)
 				HandleMouseButton(e.button);
 		};
+
 	protected:
 		void SetIsDisabled(bool newValue) {
 			isDisabled = newValue;

@@ -13,6 +13,8 @@ int main() {
 	Window window;
 	UI ui;
 
+	//This could've been moved to "audio.h", but errors arises in doing so
+	//So this is here.
 	SDL_zero(desired);
 	desired.freq = 48000;
 	desired.format = AUDIO_F32;
@@ -29,7 +31,7 @@ int main() {
 
 	SDL_EventState(SDL_DROPFILE, SDL_ENABLE); //tells SDL that the event is disabled by default.
 
-	//OpenAudioFile("richfresh.wav", window.getWindow());
+	//OpenAudioFile("richfresh.wav", window.getWindow()); (delete this when it's time to actually publish)
 		
 	//Update frame until we close program
 	while (running) {
@@ -56,6 +58,10 @@ int main() {
 		window.Update();
 
 	}
+
+	//Clean up
+
+	SDL_FreeWAV(wavbuf);
 
 	SDL_CloseAudioDevice(audio_device);
 

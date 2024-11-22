@@ -24,9 +24,10 @@
   <ItemGroup>
     <ClInclude Include="audio.h" />
     <ClInclude Include="button.h" />
-    <ClInclude Include="PlaylistButton.h" />
+    <ClInclude Include="PlayPauseButton.h" />
     <ClInclude Include="rectangle.h" />
     <ClInclude Include="screen.h" />
+    <ClInclude Include="texturebutton.h" />
     <ClInclude Include="ui.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
