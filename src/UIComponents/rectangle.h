@@ -25,7 +25,11 @@ public:
     int getX() const { return rect.x; }
     int getY() const { return rect.y; }
     int getWidth() const { return rect.w; }
-    int getHeight() const { return rect.h; }
+    int getHeight() const { return rect.h; }\
+
+    //Set position
+    void setX(int x) { rect.x = x; }
+    void setY(int y) { rect.x = y; }
 
     //Convert rectangle to SDL_Rect
     SDL_Rect getSDLRect() const { return rect; }

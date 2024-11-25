@@ -50,14 +50,14 @@
     <ClInclude Include="src\Components\texture.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="src\Components\ui.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
     <ClInclude Include="src\MainUI\derivedButton.h">
       <Filter>Header Files\MainUI</Filter>
     </ClInclude>
     <ClInclude Include="src\MainUI\PlayPauseButton.h">
       <Filter>Header Files\MainUI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Components\ui.h">
+      <Filter>Header Files\Components</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

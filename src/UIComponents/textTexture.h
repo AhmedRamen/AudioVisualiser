@@ -1,11 +1,12 @@
 #pragma once
 #include "../Components/texture.h"
 #include <SDL_ttf.h>
+#include "../Components/screen.h"
 
 class TextTexture : public LTexture {
 public:
 	//Constructor
-	explicit TextTexture(const Rectangle& rect) : mRectangle(rect) {}
+    TextTexture(const Rectangle& rect, std::string text, SDL_Color color = { 255,255,255,255 }) : mRectangle(rect), text{ loadFromRenderedText(text, color, font, renderer) }, color{ color } {}
 
 	//Load text as texture
 	bool loadFromRenderedText(const std::string textureText, SDL_Color textColor, TTF_Font* font, SDL_Renderer* renderer);
@@ -24,11 +25,11 @@ private:
 
     //These are new variables
     std::string text;
-    TTF_Font* font;
+    TTF_Font* font = TTF_OpenFont("assets/m5x7.ttf", 32);
     SDL_Color color;
 };
 
-inline bool TextTexture::loadFromRenderedText(std::string textureText, SDL_Color textColor, TTF_Font* font ,SDL_Renderer* renderer)
+inline bool TextTexture::loadFromRenderedText(std::string textureText, SDL_Color textColor, TTF_Font* font, SDL_Renderer* renderer)
 {
     //Get rid of preexisting texture
     free();
@@ -36,9 +37,7 @@ inline bool TextTexture::loadFromRenderedText(std::string textureText, SDL_Color
     //Render text surface
     SDL_Surface* textSurface = TTF_RenderText_Solid(font, textureText.c_str(), textColor);
     if (textSurface == NULL)
-    {
         printf("Unable to render text surface! SDL_ttf Error: %s\n", TTF_GetError());
-    }
     else
     {
         //Create texture from surface pixels

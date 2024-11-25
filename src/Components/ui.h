@@ -16,9 +16,11 @@ public:
 	//Draw everything to the screen with one class
 	void Render(SDL_Renderer* renderer) {
 		//button.Render(renderer);
+		idk.render(renderer, 0, SDL_FLIP_NONE, { 200,100,200,200 });
 		bar.Render(renderer);
 		play.Render(renderer);
-		text.render(renderer);
+		//text.render(renderer);
+		
 	}
 
 	//Handle everything with one class (this goes in the while(running) {})
@@ -35,7 +37,8 @@ public:
 
 	//GRAY BAR...
 	Rectangle bar{ 0, 330, 600, 70, {0, 0, 0, 150}};
-	TextTexture text{ { 100, 100, 200, 50 } };
+	LTexture idk{ "assets/Star.png", {100, 100, 200, 200} };
+	//TextTexture text{ { 100, 100, 200, 50 }, "Hello world", {255, 255, 255} };
 };
 
 /* Examples

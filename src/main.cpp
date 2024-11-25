@@ -1,4 +1,5 @@
 #include <SDL.h>
+#include <SDL_ttf.h>
 #undef main //Needed because this caused errors without it
 #include "Components/screen.h"
 #include "Components/audio.h"
@@ -7,6 +8,10 @@
 int main() {
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) == -1) {
 		panic_and_abort("SDL_Init failed", SDL_GetError());
+	}
+
+	if (TTF_Init() == -1) {
+		fprintf(stderr, "Failed to initalise fonts, text will be invisible, SDL_Error", SDL_GetError());
 	}
 	
 	bool running = true;
@@ -30,9 +35,8 @@ int main() {
 	}
 
 	SDL_EventState(SDL_DROPFILE, SDL_ENABLE); //tells SDL that the event is disabled by default.
-
+	double speed = 0;
 	//OpenAudioFile("richfresh.wav", window.getWindow()); (delete this when it's time to actually publish)
-		
 	//Update frame until we close program
 	while (running) {
 		SDL_Event e;
@@ -50,11 +54,15 @@ int main() {
 				break;
 			}
 		}
+		speed -= 0.5;
 
 		AudioStreamUpdate();
 
 		window.Render();
+		ui.idk.setPosition(500+speed, -300 - speed);
+		ui.idk.setRotation(speed);
 		ui.Render(window.GetRenderer());
+		
 		window.Update();
 
 	}

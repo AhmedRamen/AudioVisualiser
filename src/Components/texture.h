@@ -1,6 +1,6 @@
 #pragma once
-
 #include <SDL.h>
+
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 #include <string>
@@ -12,11 +12,14 @@
 class LTexture
 {
 public:
-    // Default constructor
-    LTexture() : mTexture(nullptr), mWidth(0), mHeight(0), mRectangle(0, 0, 0, 0) {} // Default rectangle
+    
+    LTexture() : mTexture(NULL), mRectangle{ 0, 0, 0, 0 }, mWidth(0), mHeight(0) {}
 
-    //Parameterise the constructor
-    explicit LTexture(const Rectangle& rect) : mRectangle(rect) {}
+    // Default constructor
+    LTexture(const std::string& texturePath, Rectangle rect) : mTexture(NULL), mRectangle(rect) {
+        if (!loadFromFile(texturePath, renderer))
+            fprintf(stderr, "Failed to draw texture: %s", SDL_GetError());
+    }
 
     //Deallocates memory
     ~LTexture();
@@ -38,7 +41,6 @@ public:
 
     //Renders texture at given point
     void render(SDL_Renderer* renderer,
-        double angle = 0.0,
         SDL_Point* center = NULL,
         SDL_RendererFlip flip = SDL_FLIP_NONE,
         const Rectangle& rectangle = {0, 0, 0, 0});
@@ -48,6 +50,8 @@ public:
     int getY() const;
     int getWidth() const;
     int getHeight() const;
+    void setRotation(double angle);
+    void setPosition(int x, int y);
 
 private:
     //The actual hardware texture
@@ -59,6 +63,7 @@ private:
     //Image dimensions
     int mWidth;
     int mHeight;
+    double mAngle = 0.0;
 
 };
 
@@ -74,10 +79,7 @@ inline bool LTexture::loadFromFile(std::string path, SDL_Renderer* renderer) {
     //Load image at specified path
     SDL_Surface* loadedSurface = IMG_Load(path.c_str());
     if (loadedSurface == NULL)
-    {
         printf("Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError());
-
-    }
     else
     {
         //Color key image
@@ -130,14 +132,14 @@ inline void LTexture::setBlendMode(SDL_BlendMode blending) { SDL_SetTextureBlend
 inline void LTexture::setAlpha(Uint8 alpha) { SDL_SetTextureAlphaMod(mTexture, alpha); }
 
 //Once again, pass renderer to here because we don't know any because of screen.h
-inline void LTexture::render(SDL_Renderer* renderer, double angle, SDL_Point* center, SDL_RendererFlip flip, const Rectangle& rectangle)
+inline void LTexture::render(SDL_Renderer* renderer, SDL_Point* center, SDL_RendererFlip flip, const Rectangle& rectangle)
 {
     //Get the SDL_Rect from Rectangle class
-    SDL_Rect renderQuad = rectangle.getSDLRect();
+    SDL_Rect renderQuad = { mRectangle.getX(), mRectangle.getY(), mRectangle.getWidth(), mRectangle.getHeight()};
 
     //Render to screen
     if (mTexture != NULL)
-        SDL_RenderCopyEx(renderer, mTexture, NULL, &renderQuad, angle, center ? center : NULL, flip);
+        SDL_RenderCopyEx(renderer, mTexture, NULL, &renderQuad, mAngle, center ? center : NULL, flip);
 }
 
 // Getters for rectangle properties
@@ -148,3 +150,12 @@ inline int LTexture::getY() const { return mRectangle.getY(); }
 inline int LTexture::getWidth() const { return mRectangle.getWidth(); }
 
 inline int LTexture::getHeight() const { return mRectangle.getHeight(); }
+
+inline void LTexture::setRotation(double angle) { mAngle = angle; }
+
+inline void LTexture::setPosition(int x, int y) {
+    //too lazy to overload operator =
+    mRectangle.setX(x);
+    mRectangle.setY(y);
+    mRectangle = {x, y,getWidth(),getHeight() };
+}
