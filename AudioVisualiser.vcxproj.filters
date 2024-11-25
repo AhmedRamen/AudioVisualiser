@@ -44,5 +44,11 @@
     <ClInclude Include="texturebutton.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="texture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="textTexture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

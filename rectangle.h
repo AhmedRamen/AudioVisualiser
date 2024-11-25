@@ -27,6 +27,8 @@ public:
     int getWidth() const { return rect.w; }
     int getHeight() const { return rect.h; }
 
+    //Convert rectangle to SDL_Rect
+    SDL_Rect getSDLRect() const { return rect; }
 
 private:
 	SDL_Rect rect{ 0,0,0,0 };

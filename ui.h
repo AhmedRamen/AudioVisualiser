@@ -1,5 +1,11 @@
 #pragma once
+
+//Properties
 #include "button.h"
+#include "texture.h"
+#include "textTexture.h"
+
+//Buttons
 #include "texturebutton.h"
 //#include "PlaylistButton.h"
 #include "PlayPauseButton.h"
@@ -12,6 +18,7 @@ public:
 		//button.Render(renderer);
 		bar.Render(renderer);
 		play.Render(renderer);
+		text.render(renderer);
 	}
 
 	//Handle everything with one class (this goes in the while(running) {})
@@ -28,5 +35,17 @@ public:
 
 	//GRAY BAR...
 	Rectangle bar{ 0, 330, 600, 70, {0, 0, 0, 150}};
-	
+	TextTexture text{ { 100, 100, 200, 50 } };
 };
+
+/* Examples
+* TextTexture myTextTexture(100, 100, 200, 50); // Position (100, 100) with width 200 and height 50
+* 
+* // Load text as a texture.
+* SDL_Color textColor = {255, 255, 255}; // White color
+* 
+* if (myTextTexture.loadFromRenderedText("Hello World!", textColor, gFont, renderer))
+*    myTextTexture.render(renderer);
+*  else
+*     printf("Failed to load rendered text!\n");
+*/
