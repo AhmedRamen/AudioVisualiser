@@ -35,7 +35,6 @@ class Window {
 		
 		//Render the screen
 		void Render() {
-			SDL_SetRenderDrawColor(renderer, 50, 50, 50, 255);
 			SDL_RenderClear(renderer);
 		}
 

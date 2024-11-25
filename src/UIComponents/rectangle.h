@@ -31,9 +31,6 @@ public:
     void setX(int x) { rect.x = x; }
     void setY(int y) { rect.x = y; }
 
-    //Convert rectangle to SDL_Rect
-    SDL_Rect getSDLRect() const { return rect; }
-
 private:
 	SDL_Rect rect{ 0,0,0,0 };
 	SDL_Color Color{ 0,0,0,0 };

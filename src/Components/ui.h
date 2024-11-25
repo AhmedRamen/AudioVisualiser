@@ -40,15 +40,3 @@ public:
 	LTexture idk{ "assets/Star.png", {100, 100, 200, 200} };
 	//TextTexture text{ { 100, 100, 200, 50 }, "Hello world", {255, 255, 255} };
 };
-
-/* Examples
-* TextTexture myTextTexture(100, 100, 200, 50); // Position (100, 100) with width 200 and height 50
-* 
-* // Load text as a texture.
-* SDL_Color textColor = {255, 255, 255}; // White color
-* 
-* if (myTextTexture.loadFromRenderedText("Hello World!", textColor, gFont, renderer))
-*    myTextTexture.render(renderer);
-*  else
-*     printf("Failed to load rendered text!\n");
-*/
