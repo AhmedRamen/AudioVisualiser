@@ -1,14 +1,14 @@
 #pragma once
 
 //Properties
-#include "button.h"
-#include "texture.h"
-#include "textTexture.h"
+#include "UIComponents/button.h"
+#include "Components/texture.h"
+#include "UIComponents/textTexture.h"
 
 //Buttons
-#include "texturebutton.h"
+#include "UIComponents/texturebutton.h"
 //#include "PlaylistButton.h"
-#include "PlayPauseButton.h"
+#include "MainUI/PlayPauseButton.h"
 
 class UI {
 public:

@@ -3,7 +3,7 @@
 #include <SDL_image.h>
 #include <string>
 #include "rectangle.h"
-#include "screen.h"
+#include "../Components/screen.h"
 
 class TextureButton : public Rectangle {
 public:

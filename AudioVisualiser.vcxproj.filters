@@ -13,42 +13,51 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header Files\UI">
+    <Filter Include="Header Files\Components">
+      <UniqueIdentifier>{5706ccb7-e35c-4225-9b06-fa9597dddfe0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\UIComponents">
+      <UniqueIdentifier>{5a0cac1a-8fc4-450b-8d34-9f0bb4d2207d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\MainUI">
       <UniqueIdentifier>{03db7777-a34c-4921-adcc-65be5c5b0e6a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="screen.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\UIComponents\button.h">
+      <Filter>Header Files\UIComponents</Filter>
     </ClInclude>
-    <ClInclude Include="audio.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\UIComponents\rectangle.h">
+      <Filter>Header Files\UIComponents</Filter>
     </ClInclude>
-    <ClInclude Include="rectangle.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\UIComponents\textTexture.h">
+      <Filter>Header Files\UIComponents</Filter>
     </ClInclude>
-    <ClInclude Include="button.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\UIComponents\texturebutton.h">
+      <Filter>Header Files\UIComponents</Filter>
     </ClInclude>
-    <ClInclude Include="ui.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\Components\audio.h">
+      <Filter>Header Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="PlayPauseButton.h">
-      <Filter>Header Files\UI</Filter>
+    <ClInclude Include="src\Components\screen.h">
+      <Filter>Header Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="texturebutton.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\Components\texture.h">
+      <Filter>Header Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="texture.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\Components\ui.h">
+      <Filter>Header Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="textTexture.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\MainUI\derivedButton.h">
+      <Filter>Header Files\MainUI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MainUI\PlayPauseButton.h">
+      <Filter>Header Files\MainUI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

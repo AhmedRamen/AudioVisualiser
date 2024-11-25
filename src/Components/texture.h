@@ -1,9 +1,10 @@
 #pragma once
+
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 #include <string>
-#include "rectangle.h"
+#include "../UIComponents/rectangle.h"
 
 //Taken entirely from lazyfoo
 
@@ -36,11 +37,11 @@ public:
     void setAlpha(Uint8 alpha);
 
     //Renders texture at given point
-    void render(SDL_Renderer* renderer = NULL, 
-        double angle = 0.0, 
-        SDL_Point* center = NULL, 
-        SDL_RendererFlip flip = SDL_FLIP_NONE, 
-        const Rectangle& rectangle);
+    void render(SDL_Renderer* renderer,
+        double angle = 0.0,
+        SDL_Point* center = NULL,
+        SDL_RendererFlip flip = SDL_FLIP_NONE,
+        const Rectangle& rectangle = {0, 0, 0, 0});
 
     //Gets image properties
     int getX() const;
@@ -61,19 +62,11 @@ private:
 
 };
 
-//Create texture
-//LTexture::LTexture(const Rectangle& rect) : mTexture(nullptr), mRectangle(rect), mWidth(0), mHeight(0) {}
-
-//Delete texture object
-LTexture::~LTexture()
-{
-    //Deallocate
-    free();
-}
+//Deallocate texture
+LTexture::~LTexture() { free(); }
 
 //Load from file
-inline bool LTexture::loadFromFile(std::string path, SDL_Renderer* renderer)
-{
+inline bool LTexture::loadFromFile(std::string path, SDL_Renderer* renderer) {
     //Get rid of preexisting texture
     free();
 
@@ -113,14 +106,10 @@ inline bool LTexture::loadFromFile(std::string path, SDL_Renderer* renderer)
     return true;
 }
 
-
-
 //Free texture
-inline void LTexture::free()
-{
+inline void LTexture::free() {
     //Free texture if it exists
-    if (mTexture != NULL)
-    {
+    if (mTexture != NULL) {
         SDL_DestroyTexture(mTexture);
         mTexture = NULL;
         mWidth = 0;
@@ -132,23 +121,13 @@ inline void LTexture::free()
 }
 
 //Modulate texture
-inline void LTexture::setColor(Uint8 red, Uint8 green, Uint8 blue)
-{
-    SDL_SetTextureColorMod(mTexture, red, green, blue);
-}
+inline void LTexture::setColor(Uint8 red, Uint8 green, Uint8 blue) { SDL_SetTextureColorMod(mTexture, red, green, blue); }
 
 //Set blending function
-inline void LTexture::setBlendMode(SDL_BlendMode blending)
-{
-    SDL_SetTextureBlendMode(mTexture, blending);
-}
+inline void LTexture::setBlendMode(SDL_BlendMode blending) { SDL_SetTextureBlendMode(mTexture, blending); }
 
 //Modulate texture alpha
-inline void LTexture::setAlpha(Uint8 alpha)
-{
-    SDL_SetTextureAlphaMod(mTexture, alpha);
-}
-
+inline void LTexture::setAlpha(Uint8 alpha) { SDL_SetTextureAlphaMod(mTexture, alpha); }
 
 //Once again, pass renderer to here because we don't know any because of screen.h
 inline void LTexture::render(SDL_Renderer* renderer, double angle, SDL_Point* center, SDL_RendererFlip flip, const Rectangle& rectangle)
@@ -157,7 +136,8 @@ inline void LTexture::render(SDL_Renderer* renderer, double angle, SDL_Point* ce
     SDL_Rect renderQuad = rectangle.getSDLRect();
 
     //Render to screen
-    SDL_RenderCopyEx(renderer, mTexture, NULL, &renderQuad, angle, center, flip);
+    if (mTexture != NULL)
+        SDL_RenderCopyEx(renderer, mTexture, NULL, &renderQuad, angle, center ? center : NULL, flip);
 }
 
 // Getters for rectangle properties

@@ -1,7 +1,7 @@
 #pragma once
-#include "texturebutton.h"
+#include "../UIComponents/texturebutton.h"
 #include <iostream>
-#include "audio.h"
+#include "../Components/audio.h"
 
 class PlayPauseButton : public TextureButton {
 public:

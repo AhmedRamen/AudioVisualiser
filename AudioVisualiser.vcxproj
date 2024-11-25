@@ -19,18 +19,19 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="audio.h" />
-    <ClInclude Include="button.h" />
-    <ClInclude Include="PlayPauseButton.h" />
-    <ClInclude Include="rectangle.h" />
-    <ClInclude Include="screen.h" />
-    <ClInclude Include="textTexture.h" />
-    <ClInclude Include="texture.h" />
-    <ClInclude Include="texturebutton.h" />
-    <ClInclude Include="ui.h" />
+    <ClInclude Include="src\Components\audio.h" />
+    <ClInclude Include="src\Components\screen.h" />
+    <ClInclude Include="src\Components\texture.h" />
+    <ClInclude Include="src\Components\ui.h" />
+    <ClInclude Include="src\MainUI\derivedButton.h" />
+    <ClInclude Include="src\MainUI\PlayPauseButton.h" />
+    <ClInclude Include="src\UIComponents\button.h" />
+    <ClInclude Include="src\UIComponents\rectangle.h" />
+    <ClInclude Include="src\UIComponents\textTexture.h" />
+    <ClInclude Include="src\UIComponents\texturebutton.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

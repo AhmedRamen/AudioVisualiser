@@ -1,8 +1,8 @@
 #include <SDL.h>
 #undef main //Needed because this caused errors without it
-#include "screen.h"
-#include "audio.h"
-#include "ui.h"
+#include "Components/screen.h"
+#include "Components/audio.h"
+#include "Components/ui.h"
 
 int main() {
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) == -1) {

@@ -1,5 +1,5 @@
 #pragma once
-#include "texture.h"
+#include "../Components/texture.h"
 #include <SDL_ttf.h>
 
 class TextTexture : public LTexture {
@@ -9,7 +9,6 @@ public:
 
 	//Load text as texture
 	bool loadFromRenderedText(const std::string textureText, SDL_Color textColor, TTF_Font* font, SDL_Renderer* renderer);
-
     
 private:
     //Declare everything again lol
@@ -22,6 +21,11 @@ private:
     //Image dimensions
     int mWidth;
     int mHeight;
+
+    //These are new variables
+    std::string text;
+    TTF_Font* font;
+    SDL_Color color;
 };
 
 inline bool TextTexture::loadFromRenderedText(std::string textureText, SDL_Color textColor, TTF_Font* font ,SDL_Renderer* renderer)
@@ -60,3 +64,4 @@ inline bool TextTexture::loadFromRenderedText(std::string textureText, SDL_Color
     //Return success
     return mTexture != NULL;
 }
+
