@@ -18,7 +18,7 @@ public:
     // Default constructor
     LTexture(const std::string& texturePath, Rectangle rect) : mTexture(NULL), mRectangle(rect) {
         if (!loadFromFile(texturePath, renderer))
-            fprintf(stderr, "Failed to draw texture: %s", SDL_GetError());
+            fprintf(stderr, "Failed to draw texture: %s\n", SDL_GetError());
     }
 
     //Deallocates memory
@@ -112,7 +112,7 @@ inline bool LTexture::loadFromFile(std::string path, SDL_Renderer* renderer) {
 inline void LTexture::free() {
     //Free texture if it exists
     if (mTexture != NULL) {
-        SDL_DestroyTexture(mTexture);
+        SDL_DestroyTexture(mTexture); //FIXME: crashes when you close for some reason
         mTexture = NULL;
         mWidth = 0;
         mHeight = 0;

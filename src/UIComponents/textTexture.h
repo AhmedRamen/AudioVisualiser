@@ -6,10 +6,29 @@
 class TextTexture : public LTexture {
 public:
 	//Constructor
-    TextTexture(const Rectangle& rect, std::string text, SDL_Color color = { 255,255,255,255 }) : mRectangle(rect), text{ loadFromRenderedText(text, color, font, renderer) }, color{ color } {}
+    TextTexture(const Rectangle& rect, std::string text, SDL_Color color = { 255,255,255,255 }) : mRectangle(rect), text(text), color{color} {
+    font = TTF_OpenFont("assets/m5x7.ttf", 16);
+    //Font doesn't exist
+    if (!font)
+        fprintf(stderr, "Failed to load font. SDL_ERROR: %s\n", TTF_GetError());
+
+    //Renderer doesn't exist...???
+    if (renderer && font)
+        loadFromRenderedText(text, color, renderer);
+    }
 
 	//Load text as texture
-	bool loadFromRenderedText(const std::string textureText, SDL_Color textColor, TTF_Font* font, SDL_Renderer* renderer);
+	bool loadFromRenderedText(const std::string textureText, SDL_Color textColor, SDL_Renderer* renderer);
+
+    void free();
+
+    ~TextTexture() {
+        free();
+        if (font) {
+            TTF_CloseFont(font);
+            font = NULL;
+        }
+    }
     
 private:
     //Declare everything again lol
@@ -25,11 +44,23 @@ private:
 
     //These are new variables
     std::string text;
-    TTF_Font* font = TTF_OpenFont("assets/m5x7.ttf", 32);
+    TTF_Font* font;
     SDL_Color color;
+
+
 };
 
-inline bool TextTexture::loadFromRenderedText(std::string textureText, SDL_Color textColor, TTF_Font* font, SDL_Renderer* renderer)
+// Free texture if it exists 
+inline void TextTexture::free() {
+    if (mTexture) {
+        SDL_DestroyTexture(mTexture);
+        mTexture = nullptr;
+        mWidth = 0;
+        mHeight = 0;
+    }
+}
+
+inline bool TextTexture::loadFromRenderedText(std::string textureText, SDL_Color textColor, SDL_Renderer* renderer)
 {
     //Get rid of preexisting texture
     free();
@@ -54,6 +85,7 @@ inline bool TextTexture::loadFromRenderedText(std::string textureText, SDL_Color
 
             // Update the rectangle dimensions to match the texture size
             mRectangle = Rectangle(mRectangle.getX(), mRectangle.getY(), mWidth, mHeight);
+
         }
 
         //Get rid of old surface

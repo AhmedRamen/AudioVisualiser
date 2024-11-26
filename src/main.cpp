@@ -10,13 +10,15 @@ int main() {
 		panic_and_abort("SDL_Init failed", SDL_GetError());
 	}
 
-	if (TTF_Init() == -1) {
-		fprintf(stderr, "Failed to initalise fonts, text will be invisible, SDL_Error", SDL_GetError());
+	if (TTF_Init() <= 0) {
+		fprintf(stderr, "Failed to initalise TTF, text will be invisible.\n");
 	}
+
 	
 	bool running = true;
 	Window window;
 	UI ui;
+
 
 	//This could've been moved to "audio.h", but errors arises in doing so
 	//So this is here.
@@ -59,7 +61,7 @@ int main() {
 		AudioStreamUpdate();
 
 		window.Render();
-		ui.idk.setPosition(500+speed, -300 - speed);
+		ui.idk.setPosition(500+speed / 0.75, -300 - speed);
 		ui.idk.setRotation(speed);
 		ui.Render(window.GetRenderer());
 		
@@ -74,6 +76,8 @@ int main() {
 	SDL_CloseAudioDevice(audio_device);
 
 	window.~Window();
+
+	TTF_Quit();
 
 	SDL_Quit();
 

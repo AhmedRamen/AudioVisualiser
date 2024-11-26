@@ -31,6 +31,8 @@ public:
     void setX(int x) { rect.x = x; }
     void setY(int y) { rect.x = y; }
 
+    SDL_Rect getSDLRect() { return rect; }
+
 private:
 	SDL_Rect rect{ 0,0,0,0 };
 	SDL_Color Color{ 0,0,0,0 };
