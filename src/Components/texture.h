@@ -135,7 +135,9 @@ inline void LTexture::setAlpha(Uint8 alpha) { SDL_SetTextureAlphaMod(mTexture, a
 inline void LTexture::render(SDL_Renderer* renderer, SDL_Point* center, SDL_RendererFlip flip, const Rectangle& rectangle)
 {
     //Get the SDL_Rect from Rectangle class
-    SDL_Rect renderQuad = { mRectangle.getX(), mRectangle.getY(), mRectangle.getWidth(), mRectangle.getHeight()};
+    SDL_Rect renderQuad = { getX(), getY(), getWidth(), getHeight()};
+
+
 
     //Render to screen
     if (mTexture != NULL)

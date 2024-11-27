@@ -38,5 +38,5 @@ public:
 	//GRAY BAR...
 	Rectangle bar{ 0, 330, 600, 70, {0, 0, 0, 150}};
 	LTexture idk{ "assets/Star.png", {100, 100, 200, 200} };
-	TextTexture text{ { 100, 100, 200, 50 }, "Hello world", {255, 255, 255} };
+	TextTexture text{ { 200, 100, 200, 50 }, "Hello world", {0, 255, 255, 255} };
 };

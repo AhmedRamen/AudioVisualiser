@@ -6,19 +6,13 @@
 #include "Components/ui.h"
 
 int main() {
-	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) == -1) {
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_EVENTS) == -1) {
 		panic_and_abort("SDL_Init failed", SDL_GetError());
 	}
 
-	if (TTF_Init() <= 0) {
-		fprintf(stderr, "Failed to initalise TTF, text will be invisible.\n");
-	}
-
-	
 	bool running = true;
 	Window window;
 	UI ui;
-
 
 	//This could've been moved to "audio.h", but errors arises in doing so
 	//So this is here.
