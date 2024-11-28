@@ -44,7 +44,11 @@ class Window {
 		//Get surface
 		SDL_Renderer* GetRenderer() { return SDL_GetRenderer(window); }
 
-		
+		//Audio waveform shenanigans
+		int getWidth() { return screen_width; }
+		int getHeight() { return screen_height; }
+
+
 		//Clean up
 		~Window() {
 			SDL_DestroyRenderer(renderer);

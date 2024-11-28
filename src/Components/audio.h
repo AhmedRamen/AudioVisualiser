@@ -1,7 +1,16 @@
 #pragma once
 #include <SDL.h>
+#include <iostream>
+#include <mutex>
+#include <vector>
+#include <algorithm>
+#include "screen.h"
 
 static SDL_AudioDeviceID audio_device = 0;
+
+std::mutex waveform_mutex;
+
+std::vector<float> waveform_data; //Store waveform samples
 
 SDL_AudioSpec desired;
 
@@ -76,28 +85,84 @@ bool OpenAudioFile(const char *fname, SDL_Window* window) {
 }
 
 
-//Audio chunking.
-inline void AudioStreamUpdate() {
-	if (SDL_GetQueuedAudioSize(audio_device) < 8192) {
-		//Get bytes from audio stream
-		const int bytes_remaining = SDL_AudioStreamAvailable(stream);
-		//No more bytes to accumulate, queue more audio?
-		if (bytes_remaining > 0) {
-			const Uint32 new_bytes = SDL_min(bytes_remaining, 32 * 1024);
-			Uint8 convert_bufferer[32 * 1024];
-			const int num_converted_bytes = SDL_AudioStreamGet(stream, convert_bufferer, new_bytes);
-			//Convert bytes is more than zero
-			if (num_converted_bytes > 0) {
-				const int num_samples = (num_converted_bytes / sizeof(float));
-				float* samples = (float*)convert_bufferer;
+// Function to draw waveform
+inline void drawWaveform(SDL_Renderer* renderer, int lines, int width, int height) {
+    size_t dataSize;
+    {
+        std::lock_guard<std::mutex> lock(waveform_mutex);
+        dataSize = waveform_data.size();
+    }
 
-				//Change the volume of the audio
-				if (volume_slider_value != 1.0f) {
-					for (int i = 0; i < num_samples; i++)
-						samples[i] *= volume_slider_value;
-				}
-			}
-			SDL_QueueAudio(audio_device, convert_bufferer, new_bytes);
-		}
-	}
+    // No data exists yet.
+    if (dataSize < 2)
+        return;
+
+    // Calculate how many samples to skip for each line segment
+    size_t cut = dataSize / (lines - 1);
+
+    // Precompute scaling factors
+    float heightScale = height / 2.0f;
+    float halfHeight = height / 2;
+
+    // Draw lines based on accumulated samples
+    for (size_t i = 0; i < lines - 1; ++i) {
+        // Get index for first and second sample
+        size_t index1 = i * cut; 
+        size_t index2 = (i + 1) * cut;
+
+        // Ensure indices are within bounds
+        if (index2 >= dataSize) {
+            index2 = dataSize - 1;
+        }
+
+        float sample1 = waveform_data[index1];
+        float sample2 = waveform_data[index2];
+
+        // Scale sample to window's height
+        int point_y1 = static_cast<int>((sample1 * heightScale) + halfHeight);
+        int point_y2 = static_cast<int>((sample2 * heightScale) + halfHeight);
+        //Spread to window's width
+        int point_x1 = static_cast<int>((index1 * width) / dataSize);
+        int point_x2 = static_cast<int>((index2 * width) / dataSize);
+
+        // Draw line between two points
+        SDL_SetRenderDrawColor(renderer, 0, 255, 128, 255);
+        SDL_RenderDrawLine(renderer, point_x1, point_y1, point_x2, point_y2);
+    }
+}
+
+// Audio chunking.
+inline void AudioStreamUpdate() {
+    if (SDL_GetQueuedAudioSize(audio_device) < 8192) {
+        //Get bytes from audio stream
+        const int bytes_remaining = SDL_AudioStreamAvailable(stream);
+
+        //No more bytes to accumulate, queue more
+        if (bytes_remaining > 0) {
+            const Uint32 new_bytes = SDL_min(bytes_remaining, 32 * 1024);
+            Uint8 convert_bufferer[32 * 1024];
+            const int num_converted_bytes = SDL_AudioStreamGet(stream, convert_bufferer, new_bytes);
+            
+            //Converted bytes is more than zero
+            if (num_converted_bytes > 0) {
+                int num_samples = num_converted_bytes / sizeof(float);
+                float* samples = reinterpret_cast<float*>(convert_bufferer);
+                
+                //Add to waveform data
+                {
+                    std::lock_guard<std::mutex> lock(waveform_mutex);
+                    size_t old_size = waveform_data.size();
+                    waveform_data.resize(old_size + num_samples); // Resize once
+                    std::copy(samples, samples + num_samples, waveform_data.begin() + old_size); // Copy samples
+                }
+
+                // Change the volume of the audio
+                if (volume_slider_value != 1.0f) {
+                    for (int i = 0; i < num_samples; i++)
+                        samples[i] *= volume_slider_value;
+                }
+            }
+            SDL_QueueAudio(audio_device, convert_bufferer, new_bytes);
+        }
+    }
 }

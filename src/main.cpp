@@ -5,7 +5,7 @@
 #include "Components/audio.h"
 #include "Components/ui.h"
 
-int main() {
+int main(int argc, char* argv[]) {
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_EVENTS) == -1) {
 		panic_and_abort("SDL_Init failed", SDL_GetError());
 	}
@@ -55,10 +55,10 @@ int main() {
 		AudioStreamUpdate();
 
 		window.Render();
-		ui.idk.setPosition(500+speed / 0.75, -300 - speed);
+		//ui.idk.setPosition(500+speed / 0.75, -300 - speed);
 		ui.idk.setRotation(speed);
-		ui.Render(window.GetRenderer());
-		
+		drawWaveform(renderer, argc > 1 ? atoi(argv[1]) : 50, window.getWidth(), window.getHeight());
+		ui.Render(window.GetRenderer()); 
 		window.Update();
 
 	}

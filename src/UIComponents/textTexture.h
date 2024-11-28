@@ -38,7 +38,7 @@ public:
     ~TextTexture() {
         free();
         if (font) {
-            TTF_CloseFont(font);
+            TTF_CloseFont(font); //fixme: this crashes on closing (which shouldn't matter but it's annoying when coding!!!!)
             font = NULL;
         }
     }
