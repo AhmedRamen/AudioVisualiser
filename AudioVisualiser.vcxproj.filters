@@ -59,5 +59,14 @@
     <ClInclude Include="src\Components\ui.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
+    <ClInclude Include="src\MainUI\FileButton.h">
+      <Filter>Header Files\MainUI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MainUI\VolumeSlider.h">
+      <Filter>Header Files\MainUI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MainUI\StopButton.h">
+      <Filter>Header Files\MainUI</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -2,8 +2,6 @@
 #include <SDL.h>
 #include <stdio.h>
 
-
-
 Uint64 now = SDL_GetPerformanceCounter();
 Uint64 last = 0;
 double deltaTime;
@@ -11,6 +9,9 @@ double deltaTime;
 //This would save all the trouble if this was seperate.
 SDL_Window* window;
 SDL_Renderer* renderer;
+
+int screen_width = 600;
+int screen_height = 400;
 
 //Panics and stops the program from executing any further
 inline void panic_and_abort(const char* title, const char* text) {
@@ -22,24 +23,25 @@ inline void panic_and_abort(const char* title, const char* text) {
 
 class Window {
 	public:
-		Window() { 
-			window = SDL_CreateWindow("AudioVisualee", 
-				SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 
-				screen_width, screen_height, 0); 
-			renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC);
+		Window() {
+			window = SDL_CreateWindow("AudioVisualee",
+				SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+				screen_width, screen_height, 0);
+			renderer = SDL_CreateRenderer(window, -1, NULL); //SDL_RENDERER_PRESENTVSYNC);
 			//couldn't create renderer
 			if (!renderer) {
 				panic_and_abort("Renderer couldn't be created!", SDL_GetError());
 			}
 		}
-		
+
 		//Render the screen
 		void Render() { SDL_RenderClear(renderer); }
 
 		//Update screen
-		void Update() { 
+		void Update() {
 			SDL_SetRenderDrawColor(renderer, 100, 100, 100, 255);
-			SDL_RenderPresent(renderer); }
+			SDL_RenderPresent(renderer);
+		}
 
 		//Get surface
 		SDL_Renderer* GetRenderer() { return SDL_GetRenderer(window); }
@@ -59,8 +61,4 @@ class Window {
 		Window& operator=(const Window&) = delete;
 
 		SDL_Window* getWindow() { return window; }
-
-	private:
-		int screen_width = 600;
-		int screen_height = 400;
 };

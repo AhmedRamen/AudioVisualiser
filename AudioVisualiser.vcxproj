@@ -27,7 +27,10 @@
     <ClInclude Include="src\Components\texture.h" />
     <ClInclude Include="src\Components\ui.h" />
     <ClInclude Include="src\MainUI\derivedButton.h" />
+    <ClInclude Include="src\MainUI\FileButton.h" />
     <ClInclude Include="src\MainUI\PlayPauseButton.h" />
+    <ClInclude Include="src\MainUI\StopButton.h" />
+    <ClInclude Include="src\MainUI\VolumeSlider.h" />
     <ClInclude Include="src\UIComponents\button.h" />
     <ClInclude Include="src\UIComponents\rectangle.h" />
     <ClInclude Include="src\UIComponents\textTexture.h" />
@@ -128,6 +131,8 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>SDL2.lib;SDL2Main.lib;SDL2_image.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>
+      </AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

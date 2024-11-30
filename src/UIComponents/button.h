@@ -2,10 +2,11 @@
 #include <SDL.h>
 #include "rectangle.h"
 
-class Button : public Rectangle {
+namespace AV {
+	class Button : public Rectangle {
 	public:
 		Button(int x, int y, int w, int h) : Rectangle{ x,y,w,h, {0,255,0} } {}
-	
+
 		//Handle an event
 		void HandleEvent(const SDL_Event& e) {
 			if (isDisabled) return;
@@ -26,8 +27,8 @@ class Button : public Rectangle {
 		virtual void HandleMouseExit() {
 			SetColor({ 255, 0, 0 });
 		}
-		virtual void HandleLeftClick(){}
-		virtual void HandleRightClick(){}
+		virtual void HandleLeftClick() {}
+		virtual void HandleRightClick() {}
 
 	private:
 		//Handle mouse movement
@@ -52,4 +53,5 @@ class Button : public Rectangle {
 		}
 
 		bool isDisabled{ false };
-};
+	};
+}

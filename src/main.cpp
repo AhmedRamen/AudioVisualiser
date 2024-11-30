@@ -1,9 +1,10 @@
 #include <SDL.h>
 #include <SDL_ttf.h>
 #undef main //Needed because this caused errors without it
-#include "Components/screen.h"
-#include "Components/audio.h"
 #include "Components/ui.h"
+#include "Components/audio.h"
+
+using namespace AV;
 
 int main(int argc, char* argv[]) {
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_EVENTS) == -1) {
@@ -14,15 +15,14 @@ int main(int argc, char* argv[]) {
 	Window window;
 	UI ui;
 
-	//This could've been moved to "audio.h", but errors arises in doing so
-	//So this is here.
+	//This breaks audio if removed lol
 	SDL_zero(desired);
 	desired.freq = 48000;
 	desired.format = AUDIO_F32;
 	desired.channels = 2;
-	desired.samples = 4096;
+	desired.samples = 2048;
 	desired.callback = NULL;
-
+	
 	//Attempt to open up driver
 	audio_device = SDL_OpenAudioDevice(NULL, 0, &desired, NULL, 0);
 	//Couldn't open the audio device? Throw error.
@@ -32,9 +32,13 @@ int main(int argc, char* argv[]) {
 
 	SDL_EventState(SDL_DROPFILE, SDL_ENABLE); //tells SDL that the event is disabled by default.
 	double speed = 0;
-	//OpenAudioFile("richfresh.wav", window.getWindow()); (delete this when it's time to actually publish)
+
+	const int targetFPS = 60;
+	const int frameDelay = 1000 / targetFPS; // Delay in milliseconds
+
 	//Update frame until we close program
 	while (running) {
+		Uint32 frameStart = SDL_GetTicks();
 		SDL_Event e;
 		while (SDL_PollEvent(&e)) {
 			ui.HandleEvent(e);
@@ -55,12 +59,19 @@ int main(int argc, char* argv[]) {
 		AudioStreamUpdate();
 
 		window.Render();
-		//ui.idk.setPosition(500+speed / 0.75, -300 - speed);
+
 		ui.idk.setRotation(speed);
-		drawWaveform(renderer, argc > 1 ? atoi(argv[1]) : 50, window.getWidth(), window.getHeight());
-		ui.Render(window.GetRenderer()); 
+		ui.Render(window.GetRenderer());
+		if (wavbuf != NULL)
+			drawWaveform(renderer, samplePointer, *num_samplePointer);
 		window.Update();
 
+
+		// Delay to maintain target FPS
+		Uint32 frameTime = SDL_GetTicks() - frameStart;
+		if (frameDelay > frameTime) {
+			SDL_Delay(frameDelay - frameTime);
+		}
 	}
 
 	//Clean up
