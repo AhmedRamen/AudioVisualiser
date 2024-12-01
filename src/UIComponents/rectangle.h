@@ -10,6 +10,9 @@ namespace AV {
             //Draw colour
             SDL_SetRenderDrawColor(renderer, Color.r, Color.g, Color.b, Color.a);
 
+            //Transparency (if it exists)
+            SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+
             //Draw rectangle
             SDL_RenderFillRect(renderer, &rect);
         }

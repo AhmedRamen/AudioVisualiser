@@ -20,6 +20,58 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\SDL_Sound\libmodplug\fastmix.c" />
+    <ClCompile Include="src\SDL_Sound\libmodplug\load_669.c" />
+    <ClCompile Include="src\SDL_Sound\libmodplug\load_amf.c" />
+    <ClCompile Include="src\SDL_Sound\libmodplug\load_ams.c" />
+    <ClCompile Include="src\SDL_Sound\libmodplug\load_dbm.c" />
+    <ClCompile Include="src\SDL_Sound\libmodplug\load_dmf.c" />
+    <ClCompile Include="src\SDL_Sound\libmodplug\load_dsm.c" />
+    <ClCompile Include="src\SDL_Sound\libmodplug\load_far.c" />
+    <ClCompile Include="src\SDL_Sound\libmodplug\load_gdm.c" />
+    <ClCompile Include="src\SDL_Sound\libmodplug\load_it.c" />
+    <ClCompile Include="src\SDL_Sound\libmodplug\load_mdl.c" />
+    <ClCompile Include="src\SDL_Sound\libmodplug\load_med.c" />
+    <ClCompile Include="src\SDL_Sound\libmodplug\load_mod.c" />
+    <ClCompile Include="src\SDL_Sound\libmodplug\load_mt2.c" />
+    <ClCompile Include="src\SDL_Sound\libmodplug\load_mtm.c" />
+    <ClCompile Include="src\SDL_Sound\libmodplug\load_okt.c" />
+    <ClCompile Include="src\SDL_Sound\libmodplug\load_psm.c" />
+    <ClCompile Include="src\SDL_Sound\libmodplug\load_ptm.c" />
+    <ClCompile Include="src\SDL_Sound\libmodplug\load_s3m.c" />
+    <ClCompile Include="src\SDL_Sound\libmodplug\load_stm.c" />
+    <ClCompile Include="src\SDL_Sound\libmodplug\load_ult.c" />
+    <ClCompile Include="src\SDL_Sound\libmodplug\load_umx.c" />
+    <ClCompile Include="src\SDL_Sound\libmodplug\load_xm.c" />
+    <ClCompile Include="src\SDL_Sound\libmodplug\mmcmp.c" />
+    <ClCompile Include="src\SDL_Sound\libmodplug\modplug.c" />
+    <ClCompile Include="src\SDL_Sound\libmodplug\sndfile.c" />
+    <ClCompile Include="src\SDL_Sound\libmodplug\sndmix.c" />
+    <ClCompile Include="src\SDL_Sound\libmodplug\snd_dsp.c" />
+    <ClCompile Include="src\SDL_Sound\libmodplug\snd_flt.c" />
+    <ClCompile Include="src\SDL_Sound\libmodplug\snd_fx.c" />
+    <ClCompile Include="src\SDL_Sound\SDL_sound.c" />
+    <ClCompile Include="src\SDL_Sound\SDL_sound_aiff.c" />
+    <ClCompile Include="src\SDL_Sound\SDL_sound_au.c" />
+    <ClCompile Include="src\SDL_Sound\SDL_sound_coreaudio.c" />
+    <ClCompile Include="src\SDL_Sound\SDL_sound_flac.c" />
+    <ClCompile Include="src\SDL_Sound\SDL_sound_midi.c" />
+    <ClCompile Include="src\SDL_Sound\SDL_sound_modplug.c" />
+    <ClCompile Include="src\SDL_Sound\SDL_sound_mp3.c" />
+    <ClCompile Include="src\SDL_Sound\SDL_sound_raw.c" />
+    <ClCompile Include="src\SDL_Sound\SDL_sound_shn.c" />
+    <ClCompile Include="src\SDL_Sound\SDL_sound_voc.c" />
+    <ClCompile Include="src\SDL_Sound\SDL_sound_vorbis.c" />
+    <ClCompile Include="src\SDL_Sound\SDL_sound_wav.c" />
+    <ClCompile Include="src\SDL_Sound\timidity\common.c" />
+    <ClCompile Include="src\SDL_Sound\timidity\instrum.c" />
+    <ClCompile Include="src\SDL_Sound\timidity\mix.c" />
+    <ClCompile Include="src\SDL_Sound\timidity\output.c" />
+    <ClCompile Include="src\SDL_Sound\timidity\playmidi.c" />
+    <ClCompile Include="src\SDL_Sound\timidity\readmidi.c" />
+    <ClCompile Include="src\SDL_Sound\timidity\resample.c" />
+    <ClCompile Include="src\SDL_Sound\timidity\tables.c" />
+    <ClCompile Include="src\SDL_Sound\timidity\timidity.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Components\audio.h" />
@@ -31,10 +83,31 @@
     <ClInclude Include="src\MainUI\PlayPauseButton.h" />
     <ClInclude Include="src\MainUI\StopButton.h" />
     <ClInclude Include="src\MainUI\VolumeSlider.h" />
+    <ClInclude Include="src\SDL_Sound\dr_flac.h" />
+    <ClInclude Include="src\SDL_Sound\dr_mp3.h" />
+    <ClInclude Include="src\SDL_Sound\libmodplug\libmodplug.h" />
+    <ClInclude Include="src\SDL_Sound\libmodplug\modplug.h" />
+    <ClInclude Include="src\SDL_Sound\libmodplug\tables.h" />
+    <ClInclude Include="src\SDL_Sound\SDL_sound.h" />
+    <ClInclude Include="src\SDL_Sound\SDL_sound_internal.h" />
+    <ClInclude Include="src\SDL_Sound\stb_vorbis.h" />
+    <ClInclude Include="src\SDL_Sound\timidity\common.h" />
+    <ClInclude Include="src\SDL_Sound\timidity\instrum.h" />
+    <ClInclude Include="src\SDL_Sound\timidity\mix.h" />
+    <ClInclude Include="src\SDL_Sound\timidity\options.h" />
+    <ClInclude Include="src\SDL_Sound\timidity\output.h" />
+    <ClInclude Include="src\SDL_Sound\timidity\playmidi.h" />
+    <ClInclude Include="src\SDL_Sound\timidity\readmidi.h" />
+    <ClInclude Include="src\SDL_Sound\timidity\resample.h" />
+    <ClInclude Include="src\SDL_Sound\timidity\tables.h" />
+    <ClInclude Include="src\SDL_Sound\timidity\timidity.h" />
     <ClInclude Include="src\UIComponents\button.h" />
     <ClInclude Include="src\UIComponents\rectangle.h" />
     <ClInclude Include="src\UIComponents\textTexture.h" />
     <ClInclude Include="src\UIComponents\texturebutton.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\SDL_Sound\Makefile.os2" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

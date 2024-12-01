@@ -27,9 +27,10 @@ namespace AV {
 			bar.Render(renderer);
 			play.Render(renderer);
 			stop.Render(renderer);
+			SeekBar.render(renderer);
 			volumeBar.render(renderer);
 			volumeSlider.Render(renderer);
-			
+
 
 		}
 
@@ -45,7 +46,7 @@ namespace AV {
 		// button{ 160, 50, 100, 50 };
 		//Buttons
 		PlayPauseButton play{ 400, 335, 64, 64, "./assets/Buttons.png", 0 };
-		StopButton stop{ 300, 335, 64, 64, "./assets/Buttons.png", 320 };
+		StopButton stop{ 330, 335, 64, 64, "./assets/Buttons.png", 320 };
 		VolumeSlider volumeSlider{ 465,333,125,65, "./assets/VolSlider2.png" };
 
 
@@ -57,6 +58,7 @@ namespace AV {
 		//Non-interactable Textures
 		LTexture idk{ "assets/Star.png", {0, 100, 200, 200} };
 		LTexture volumeBar{ "assets/VolSlider1.png", {465, 333, 0, 0} };
+		LTexture SeekBar{ "assets/ProgressBar1.png", {30, 333, 0, 0 } };
 
 		TextTexture text{ { 130, 150, 200, 50 }, "Drag a .wav here to get started", {0, 255, 255, 255} };
 	};

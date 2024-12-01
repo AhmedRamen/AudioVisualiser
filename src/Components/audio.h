@@ -6,9 +6,6 @@
 #include <algorithm>
 #include "screen.h"
 
-
-
-
 namespace AV {
 
 #define audio_sample_rate 48000
@@ -35,6 +32,7 @@ namespace AV {
     SDL_AudioSpec wavspec;
     SDL_AudioStream* stream = NULL;
 
+    bool repeating = false;
 
     int* num_samplePointer = NULL;
     float* samplePointer = NULL;
@@ -46,16 +44,23 @@ namespace AV {
 
     //Destroy the audio and it's properties
     inline void stop_audio() {
+
+        //Don't touch call back as we're freeing the stream.
+        SDL_LockAudioDevice(audio_device);
         //Destroy stream
         if (stream) {
             SDL_FreeAudioStream(stream);
         }
+        //stream = NULL;
+        SDL_AtomicSetPtr((void**)&stream, NULL);
+        SDL_UnlockAudioDevice(audio_device);
+
         //Destroy the current wav buffer
         if (wavbuf) {
             SDL_FreeWAV(wavbuf);
         }
 
-        stream = NULL;
+
         wavbuf = NULL;
         wavlen = 0;
 
@@ -66,12 +71,20 @@ namespace AV {
 
     //Open a file from the specified path
     inline bool OpenAudioFile(const char* fname, SDL_Window* window) {
-        //wav variables
-        SDL_FreeAudioStream(stream);
-        stream = NULL;
+
+        SDL_AudioStream* tmpstr = stream;
+        //Don't touch call back as we're freeing the stream.
+        SDL_LockAudioDevice(audio_device);
+        //stream = NULL;
+        SDL_AtomicSetPtr((void**)&stream, NULL);
+        SDL_UnlockAudioDevice(audio_device);
+
+        SDL_FreeAudioStream(tmpstr);
+        //Load audio
         SDL_FreeWAV(wavbuf);
         wavbuf = NULL;
         wavlen = 0;
+
 
         //Check if file exists
         if (SDL_LoadWAV(fname, &wavspec, &wavbuf, &wavlen) == NULL) {
@@ -81,27 +94,32 @@ namespace AV {
         }
 
         //Create stream (if we can that is)
-        stream = SDL_NewAudioStream(wavspec.format, wavspec.channels, wavspec.freq, AUDIO_F32, 2, 48000);
-        if (!stream) {
+        tmpstr = SDL_NewAudioStream(wavspec.format, wavspec.channels, wavspec.freq, AUDIO_F32, 2, 48000);
+        if (!tmpstr) {
             SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_WARNING, "Couldn't create audio stream!", SDL_GetError(), window);
             stop_audio();
             return false;
         }
 
         //Stream didn't work
-        if (SDL_AudioStreamPut(stream, wavbuf, wavlen) == -1) {
+        if (SDL_AudioStreamPut(tmpstr, wavbuf, wavlen) == -1) {
             SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_WARNING, "Audio stream put failed!", SDL_GetError(), window);
             stop_audio();
             return false;
         }
 
-        if (SDL_AudioStreamFlush(stream) == -1) {
+        if (SDL_AudioStreamFlush(tmpstr) == -1) {
             SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_WARNING, "Audio stream flushing failed!", SDL_GetError(), window);
             stop_audio();
             return false;
         }; //Error handling should be fixed.
 
-        return true;
+
+        //Don't touch call back as we're freeing the stream.
+        SDL_LockAudioDevice(audio_device);
+        //stream = tmpstr;
+        SDL_AtomicSetPtr((void**)&stream, tmpstr);
+        SDL_UnlockAudioDevice(audio_device);
 
         // Copy data into audio buffer for visualization
         std::memcpy(audio_buffer, wavbuf, std::min(wavlen, static_cast<Uint32>(sizeof(audio_buffer))));
@@ -144,40 +162,43 @@ namespace AV {
 
 
     //Update stream
-    inline void AudioStreamUpdate() {
-        const int min_audio_buffer_size = 8192;
-        const int max_new_bytes = 32 * 1024; // Maximum bytes to queue
-
-        if (SDL_GetQueuedAudioSize(audio_device) < min_audio_buffer_size) {
-            const int bytes_remaining = SDL_AudioStreamAvailable(stream);
-            if (bytes_remaining > 0) {
-                const Uint32 new_bytes = SDL_min(bytes_remaining, static_cast<Uint32>(max_new_bytes));
-                Uint8 convert_bufferer[max_new_bytes];
-
-                const int num_converted_bytes = SDL_AudioStreamGet(stream, convert_bufferer, new_bytes);
-                if (num_converted_bytes > 0) {
-                    int num_samples = num_converted_bytes / sizeof(float);
-                    float* samples = reinterpret_cast<float*>(convert_bufferer);
-
-                    // Apply volume adjustment
-                    for (int i = 0; i < num_samples; ++i) {
-                        samples[i] *= volume_slider_value;
-                    }
-
-                    // Add samples to waveform data
-                    {
-                        std::lock_guard<std::mutex> lock(waveform_mutex);
-                        size_t old_size = waveform_data.size();
-                        waveform_data.resize(old_size + num_samples);
-                        std::copy(samples, samples + num_samples, waveform_data.begin() + old_size);
-                    }
-
-                    // Draw only when new samples are added
-                    num_samplePointer = &num_samples;
-                    samplePointer = samples;
-                    SDL_QueueAudio(audio_device, convert_bufferer, num_converted_bytes);
-                }
-            }
+    inline void SDLCALL __cdecl feed_audio_device_callback(void *userdata, Uint8* output_stream, int len) {
+        //Gets more pro
+        SDL_AudioStream*input_stream = (SDL_AudioStream *) SDL_AtomicGetPtr((void**) &stream);
+        
+        //Fill with silence if no stream exists
+        if (input_stream == NULL) {
+            std::memset(output_stream, 0, len);
+            return;
         }
-    }    
-}
+
+        const int num_converted_bytes = SDL_AudioStreamGet(input_stream, output_stream, len);
+
+        if (num_converted_bytes > 0) {
+            const int num_samples = (num_converted_bytes / sizeof(float));
+            float* samples = reinterpret_cast<float*>(output_stream);
+
+            /*TODO: rewrite waveform
+            // Add samples to waveform data
+            {
+                std::lock_guard<std::mutex> lock(waveform_mutex);   
+                size_t old_size = waveform_data.size();    
+                waveform_data.resize(old_size + num_samples); 
+                std::copy(samples, samples + num_samples, waveform_data.begin() + old_size);
+            }
+            */
+
+            // Apply volume adjustment
+            for (int i = 0; i < num_samples; ++i)
+                samples[i] *= volume_slider_value;
+            }
+
+        len -= num_converted_bytes; //Has number of bytes left after feeding device
+        output_stream += num_converted_bytes;
+
+        //fill with silence
+        if (len > 0)
+            std::memset(output_stream, 0, len);
+            //SDL_memset(output_stream, '\0', len);
+        }
+    }

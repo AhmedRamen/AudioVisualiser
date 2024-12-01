@@ -4,7 +4,6 @@
 #include "../Components/screen.h"
 
 namespace AV {
-
     TTF_Font* font; //Okay just make this global
 
     class TextTexture : public LTexture {

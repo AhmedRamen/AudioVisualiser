@@ -6,23 +6,20 @@
 
 using namespace AV;
 
-int main(int argc, char* argv[]) {
+void startup(int argc, char* argv[]) {
+	//This breaks audio if removed lol
+	SDL_AudioSpec desired;
+
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_EVENTS) == -1) {
 		panic_and_abort("SDL_Init failed", SDL_GetError());
 	}
 
-	bool running = true;
-	Window window;
-	UI ui;
-
-	//This breaks audio if removed lol
-	SDL_zero(desired);
 	desired.freq = 48000;
 	desired.format = AUDIO_F32;
 	desired.channels = 2;
 	desired.samples = 2048;
-	desired.callback = NULL;
-	
+	desired.callback = feed_audio_device_callback;
+
 	//Attempt to open up driver
 	audio_device = SDL_OpenAudioDevice(NULL, 0, &desired, NULL, 0);
 	//Couldn't open the audio device? Throw error.
@@ -31,10 +28,22 @@ int main(int argc, char* argv[]) {
 	}
 
 	SDL_EventState(SDL_DROPFILE, SDL_ENABLE); //tells SDL that the event is disabled by default.
-	double speed = 0;
+
+}
+
+int main(int argc, char* argv[]) {
+
+	startup(argc, argv);
+
+	Window window;
+	UI ui;
 
 	const int targetFPS = 60;
 	const int frameDelay = 1000 / targetFPS; // Delay in milliseconds
+
+	double speed = 0;
+
+	bool running = true;
 
 	//Update frame until we close program
 	while (running) {
@@ -56,14 +65,12 @@ int main(int argc, char* argv[]) {
 		}
 		speed -= 0.5;
 
-		AudioStreamUpdate();
-
 		window.Render();
 
 		ui.idk.setRotation(speed);
 		ui.Render(window.GetRenderer());
-		if (wavbuf != NULL)
-			drawWaveform(renderer, samplePointer, *num_samplePointer);
+		//if (wavbuf != NULL)
+			//drawWaveform(renderer, samplePointer, *num_samplePointer);
 		window.Update();
 
 

@@ -22,10 +22,175 @@
     <Filter Include="Header Files\MainUI">
       <UniqueIdentifier>{03db7777-a34c-4921-adcc-65be5c5b0e6a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\SDL">
+      <UniqueIdentifier>{14827082-0cd7-465e-8539-3a5406b5bc1e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\SDL\Timidity">
+      <UniqueIdentifier>{cffedc44-f2c9-4b5e-8a31-db96ff924388}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\SDL\libmodplug">
+      <UniqueIdentifier>{a17b31a6-7128-4f93-b604-490072e98cf3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SDL_Sound\SDL_sound.c">
+      <Filter>Header Files\SDL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SDL_Sound\SDL_sound_aiff.c">
+      <Filter>Header Files\SDL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SDL_Sound\SDL_sound_au.c">
+      <Filter>Header Files\SDL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SDL_Sound\SDL_sound_coreaudio.c">
+      <Filter>Header Files\SDL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SDL_Sound\SDL_sound_flac.c">
+      <Filter>Header Files\SDL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SDL_Sound\SDL_sound_midi.c">
+      <Filter>Header Files\SDL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SDL_Sound\SDL_sound_modplug.c">
+      <Filter>Header Files\SDL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SDL_Sound\SDL_sound_mp3.c">
+      <Filter>Header Files\SDL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SDL_Sound\SDL_sound_raw.c">
+      <Filter>Header Files\SDL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SDL_Sound\SDL_sound_shn.c">
+      <Filter>Header Files\SDL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SDL_Sound\SDL_sound_voc.c">
+      <Filter>Header Files\SDL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SDL_Sound\SDL_sound_vorbis.c">
+      <Filter>Header Files\SDL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SDL_Sound\SDL_sound_wav.c">
+      <Filter>Header Files\SDL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SDL_Sound\timidity\common.c">
+      <Filter>Header Files\SDL\Timidity</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SDL_Sound\timidity\instrum.c">
+      <Filter>Header Files\SDL\Timidity</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SDL_Sound\timidity\mix.c">
+      <Filter>Header Files\SDL\Timidity</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SDL_Sound\timidity\output.c">
+      <Filter>Header Files\SDL\Timidity</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SDL_Sound\timidity\playmidi.c">
+      <Filter>Header Files\SDL\Timidity</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SDL_Sound\timidity\readmidi.c">
+      <Filter>Header Files\SDL\Timidity</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SDL_Sound\timidity\resample.c">
+      <Filter>Header Files\SDL\Timidity</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SDL_Sound\timidity\tables.c">
+      <Filter>Header Files\SDL\Timidity</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SDL_Sound\timidity\timidity.c">
+      <Filter>Header Files\SDL\Timidity</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SDL_Sound\libmodplug\fastmix.c">
+      <Filter>Header Files\SDL\libmodplug</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SDL_Sound\libmodplug\load_669.c">
+      <Filter>Header Files\SDL\libmodplug</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SDL_Sound\libmodplug\load_amf.c">
+      <Filter>Header Files\SDL\libmodplug</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SDL_Sound\libmodplug\load_ams.c">
+      <Filter>Header Files\SDL\libmodplug</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SDL_Sound\libmodplug\load_dbm.c">
+      <Filter>Header Files\SDL\libmodplug</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SDL_Sound\libmodplug\load_dmf.c">
+      <Filter>Header Files\SDL\libmodplug</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SDL_Sound\libmodplug\load_dsm.c">
+      <Filter>Header Files\SDL\libmodplug</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SDL_Sound\libmodplug\load_far.c">
+      <Filter>Header Files\SDL\libmodplug</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SDL_Sound\libmodplug\load_gdm.c">
+      <Filter>Header Files\SDL\libmodplug</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SDL_Sound\libmodplug\load_it.c">
+      <Filter>Header Files\SDL\libmodplug</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SDL_Sound\libmodplug\load_mdl.c">
+      <Filter>Header Files\SDL\libmodplug</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SDL_Sound\libmodplug\load_med.c">
+      <Filter>Header Files\SDL\libmodplug</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SDL_Sound\libmodplug\load_mod.c">
+      <Filter>Header Files\SDL\libmodplug</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SDL_Sound\libmodplug\load_mt2.c">
+      <Filter>Header Files\SDL\libmodplug</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SDL_Sound\libmodplug\load_mtm.c">
+      <Filter>Header Files\SDL\libmodplug</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SDL_Sound\libmodplug\load_okt.c">
+      <Filter>Header Files\SDL\libmodplug</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SDL_Sound\libmodplug\load_psm.c">
+      <Filter>Header Files\SDL\libmodplug</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SDL_Sound\libmodplug\load_ptm.c">
+      <Filter>Header Files\SDL\libmodplug</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SDL_Sound\libmodplug\load_s3m.c">
+      <Filter>Header Files\SDL\libmodplug</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SDL_Sound\libmodplug\load_stm.c">
+      <Filter>Header Files\SDL\libmodplug</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SDL_Sound\libmodplug\load_ult.c">
+      <Filter>Header Files\SDL\libmodplug</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SDL_Sound\libmodplug\load_umx.c">
+      <Filter>Header Files\SDL\libmodplug</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SDL_Sound\libmodplug\load_xm.c">
+      <Filter>Header Files\SDL\libmodplug</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SDL_Sound\libmodplug\mmcmp.c">
+      <Filter>Header Files\SDL\libmodplug</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SDL_Sound\libmodplug\modplug.c">
+      <Filter>Header Files\SDL\libmodplug</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SDL_Sound\libmodplug\snd_dsp.c">
+      <Filter>Header Files\SDL\libmodplug</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SDL_Sound\libmodplug\snd_flt.c">
+      <Filter>Header Files\SDL\libmodplug</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SDL_Sound\libmodplug\snd_fx.c">
+      <Filter>Header Files\SDL\libmodplug</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SDL_Sound\libmodplug\sndfile.c">
+      <Filter>Header Files\SDL\libmodplug</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SDL_Sound\libmodplug\sndmix.c">
+      <Filter>Header Files\SDL\libmodplug</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -68,5 +233,64 @@
     <ClInclude Include="src\MainUI\StopButton.h">
       <Filter>Header Files\MainUI</Filter>
     </ClInclude>
+    <ClInclude Include="src\SDL_Sound\dr_flac.h">
+      <Filter>Header Files\SDL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SDL_Sound\dr_mp3.h">
+      <Filter>Header Files\SDL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SDL_Sound\SDL_sound.h">
+      <Filter>Header Files\SDL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SDL_Sound\SDL_sound_internal.h">
+      <Filter>Header Files\SDL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SDL_Sound\stb_vorbis.h">
+      <Filter>Header Files\SDL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SDL_Sound\timidity\common.h">
+      <Filter>Header Files\SDL\Timidity</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SDL_Sound\timidity\instrum.h">
+      <Filter>Header Files\SDL\Timidity</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SDL_Sound\timidity\mix.h">
+      <Filter>Header Files\SDL\Timidity</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SDL_Sound\timidity\options.h">
+      <Filter>Header Files\SDL\Timidity</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SDL_Sound\timidity\output.h">
+      <Filter>Header Files\SDL\Timidity</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SDL_Sound\timidity\playmidi.h">
+      <Filter>Header Files\SDL\Timidity</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SDL_Sound\timidity\readmidi.h">
+      <Filter>Header Files\SDL\Timidity</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SDL_Sound\timidity\resample.h">
+      <Filter>Header Files\SDL\Timidity</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SDL_Sound\timidity\tables.h">
+      <Filter>Header Files\SDL\Timidity</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SDL_Sound\timidity\timidity.h">
+      <Filter>Header Files\SDL\Timidity</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SDL_Sound\libmodplug\libmodplug.h">
+      <Filter>Header Files\SDL\libmodplug</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SDL_Sound\libmodplug\modplug.h">
+      <Filter>Header Files\SDL\libmodplug</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SDL_Sound\libmodplug\tables.h">
+      <Filter>Header Files\SDL\libmodplug</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\SDL_Sound\Makefile.os2">
+      <Filter>Header Files\SDL</Filter>
+    </None>
   </ItemGroup>
 </Project>
