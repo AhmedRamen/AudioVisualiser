@@ -79,8 +79,9 @@
     <ClInclude Include="src\Components\texture.h" />
     <ClInclude Include="src\Components\ui.h" />
     <ClInclude Include="src\MainUI\derivedButton.h" />
-    <ClInclude Include="src\MainUI\FileButton.h" />
+    <ClInclude Include="src\MainUI\RepeatButton.h" />
     <ClInclude Include="src\MainUI\PlayPauseButton.h" />
+    <ClInclude Include="src\MainUI\SeekBar.h" />
     <ClInclude Include="src\MainUI\StopButton.h" />
     <ClInclude Include="src\MainUI\VolumeSlider.h" />
     <ClInclude Include="src\SDL_Sound\dr_flac.h" />

@@ -35,6 +35,11 @@ namespace AV {
 
         void free();
 
+        void setNewText(const std::string newText) {
+            text = newText;
+            loadFromRenderedText(newText, color, renderer);
+        }
+
         ~TextTexture() {
             free();
             if (font) {

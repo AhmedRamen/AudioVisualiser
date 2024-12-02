@@ -6,20 +6,24 @@
 namespace AV {
 	class PlayPauseButton : public TextureButton {
 	public:
-		PlayPauseButton(int x, int y, int w, int h, std::string spriteSheetPath, int offsetX) : TextureButton{ x,y,w,h, "assets/Buttons.png", 0 } {}
+		PlayPauseButton(int x, int y, int w, int h, std::string spriteSheetPath, int offsetY) : TextureButton{ x,y,w,h, "assets/Buttons.png"} {}
 
 	protected:
-		void HandleLeftClick() override {
-			std::cout << "Playing audio: " << paused << std::endl;
-			if (stream) {
-				//Check paused or not
-				setYOffset(paused ? 64 : 0);
 
+		void HandleLeftClick() override {
+			if (current_sample) {
+				//Check paused or not
 				PauseMusic();
 			}
 
 			//Alert user that action happened
 			setFrame(2); //Clicked
+			if (paused) {
+				setYOffset(64);
+			}
+			else {
+				setYOffset(128);
+			}
 		}
 	};
 }

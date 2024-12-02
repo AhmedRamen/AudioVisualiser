@@ -1,22 +1,31 @@
 #pragma once
 #include <SDL.h>
+#include "../SDL_Sound/SDL_Sound.h"
 #include <iostream>
-#include <mutex>
 #include <vector>
 #include <algorithm>
-#include "screen.h"
+#include <mutex>
 
 namespace AV {
 
-#define audio_sample_rate 48000
-#define audio_channels 2
-#define audio_buffer_length (audio_sample_rate / 32)
-
     static SDL_AudioDeviceID audio_device = 0;
 
-    std::mutex waveform_mutex;
+    Sound_AudioInfo audio_device_spec;
 
-    std::vector<float> waveform_data; //Store waveform samples
+    static Sound_Sample* current_sample = NULL;
+
+    Uint32 sample_available = 0;
+    Uint32 sample_position = 0;
+
+    
+    int processed_samples = 0;
+
+
+    // Circular buffer for waveform data
+    const size_t max_waveform_size = 1024; // Maximum number of samples to visualize
+    std::mutex waveform_data_mutex;
+    std::vector<float> waveform_data(max_waveform_size, 0.0f);
+    size_t write_index = 0; // Index for writing new samples
 
     SDL_AudioSpec desired;
 
@@ -25,17 +34,7 @@ namespace AV {
     //Volume
     float volume_slider_value = 1.0f;
 
-    float audio_buffer[audio_buffer_length * audio_channels];
-
-    Uint8* wavbuf = NULL;
-    Uint32 wavlen = 0;
-    SDL_AudioSpec wavspec;
-    SDL_AudioStream* stream = NULL;
-
     bool repeating = false;
-
-    int* num_samplePointer = NULL;
-    float* samplePointer = NULL;
 
     inline void PauseMusic() {
         paused = paused ? false : true;
@@ -44,161 +43,165 @@ namespace AV {
 
     //Destroy the audio and it's properties
     inline void stop_audio() {
+        Sound_Sample* sample = current_sample;
 
         //Don't touch call back as we're freeing the stream.
-        SDL_LockAudioDevice(audio_device);
-        //Destroy stream
-        if (stream) {
-            SDL_FreeAudioStream(stream);
-        }
-        //stream = NULL;
-        SDL_AtomicSetPtr((void**)&stream, NULL);
-        SDL_UnlockAudioDevice(audio_device);
-
-        //Destroy the current wav buffer
-        if (wavbuf) {
-            SDL_FreeWAV(wavbuf);
+        if (sample) {
+            SDL_LockAudioDevice(audio_device);
+            //Destroy sample
+            //stream = NULL;
+            SDL_AtomicSetPtr((void**)&current_sample, NULL);
+            SDL_UnlockAudioDevice(audio_device);
+            Sound_FreeSample(sample);
         }
 
-
-        wavbuf = NULL;
-        wavlen = 0;
+        sample_available = 0;
+        sample_position = 0;
 
         //Clear waveform data after destroying audio (or audio error happened)
-        std::lock_guard<std::mutex> lock(waveform_mutex);
         waveform_data.clear();
     }
 
     //Open a file from the specified path
     inline bool OpenAudioFile(const char* fname, SDL_Window* window) {
 
-        SDL_AudioStream* tmpstr = stream;
-        //Don't touch call back as we're freeing the stream.
+        stop_audio();
+
+        //Function above should've set it to NULL.
+        SDL_assert(current_sample == NULL);
+
+        //Create new samples from new file
+        Sound_Sample* sample = Sound_NewSampleFromFile(fname, &audio_device_spec, 64 * 1024);
+
+        if (!sample) {
+            SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_WARNING, "Audio file cannot be loaded!", Sound_GetError(), window);
+            return false;
+        }
+
+        //Allow audio callback to read sample
         SDL_LockAudioDevice(audio_device);
-        //stream = NULL;
-        SDL_AtomicSetPtr((void**)&stream, NULL);
-        SDL_UnlockAudioDevice(audio_device);
-
-        SDL_FreeAudioStream(tmpstr);
-        //Load audio
-        SDL_FreeWAV(wavbuf);
-        wavbuf = NULL;
-        wavlen = 0;
-
-
-        //Check if file exists
-        if (SDL_LoadWAV(fname, &wavspec, &wavbuf, &wavlen) == NULL) {
-            SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_WARNING, "Wav file loading failed!", SDL_GetError(), window);
-            stop_audio();
-            return false;
-        }
-
-        //Create stream (if we can that is)
-        tmpstr = SDL_NewAudioStream(wavspec.format, wavspec.channels, wavspec.freq, AUDIO_F32, 2, 48000);
-        if (!tmpstr) {
-            SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_WARNING, "Couldn't create audio stream!", SDL_GetError(), window);
-            stop_audio();
-            return false;
-        }
-
-        //Stream didn't work
-        if (SDL_AudioStreamPut(tmpstr, wavbuf, wavlen) == -1) {
-            SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_WARNING, "Audio stream put failed!", SDL_GetError(), window);
-            stop_audio();
-            return false;
-        }
-
-        if (SDL_AudioStreamFlush(tmpstr) == -1) {
-            SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_WARNING, "Audio stream flushing failed!", SDL_GetError(), window);
-            stop_audio();
-            return false;
-        }; //Error handling should be fixed.
-
-
-        //Don't touch call back as we're freeing the stream.
-        SDL_LockAudioDevice(audio_device);
-        //stream = tmpstr;
-        SDL_AtomicSetPtr((void**)&stream, tmpstr);
+        //sample = current_sample;
+        SDL_AtomicSetPtr((void**)&current_sample, sample);
         SDL_UnlockAudioDevice(audio_device);
 
         // Copy data into audio buffer for visualization
-        std::memcpy(audio_buffer, wavbuf, std::min(wavlen, static_cast<Uint32>(sizeof(audio_buffer))));
-
+        //std::memcpy(audio_buffer, wavbuf, std::min(wavlen, static_cast<Uint32>(sizeof(audio_buffer))));
+        
         return true;
     }
 
-    //Draw the waveform based on the WAV
-// Function to draw waveform
-    inline void drawWaveform(SDL_Renderer* renderer, float* samples, int num_samples) {
-        float spp = static_cast<float>(screen_width) / audio_buffer_length; // Samples per pixel
-        float halfY = screen_height / 2.0f;
-        float quarterY = halfY / 2.0f;
+    // Function to draw waveform based on how loud the song is
+    inline void drawWaveform(SDL_Renderer* renderer, int width, int height) {
+        
+        //Nothing to draw, return nothing
+        if (waveform_data.empty()) return;
 
-        std::lock_guard<std::mutex> lock(waveform_mutex);
+        SDL_RenderClear(renderer);
 
-        for (int i = 1; i < num_samples && i < audio_buffer_length; i++) {
-            int x1 = static_cast<int>((i - 1) * spp);
-            int x2 = static_cast<int>(i * spp);
+        //Lock mutex to access the data
+        std::lock_guard<std::mutex> lock(waveform_data_mutex);
 
-            // Draw left channel in green
-            SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-            SDL_RenderDrawLine(renderer,
-                x1,
-                halfY - (quarterY * samples[(i - 1) * 2]),
-                x2,
-                halfY - (quarterY * samples[i * 2]));
+        // Set drawing color for waveform
+        SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255); // Green color for waveform
 
-            // Draw right channel in yellow
-            SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
-            SDL_RenderDrawLine(renderer,
-                x1,
-                halfY - (quarterY * samples[((i - 1) * 2) + 1]),
-                x2,
-                halfY - (quarterY * samples[(i * 2) + 1]));
+        // Calculate scaling factors
+        float max_amplitude = *std::max_element(waveform_data.begin(), waveform_data.end());
+        float min_amplitude = *std::min_element(waveform_data.begin(), waveform_data.end());
+
+        //Avoid division by zero
+        float amplitude_range = max_amplitude - min_amplitude;
+        if (amplitude_range == 0) amplitude_range = 1;
+
+        float x_scale = static_cast<float>(width) / max_waveform_size; // Scale x-axis
+        float y_scale = (height / 2 ) / amplitude_range; // Scale y-axis
+
+        //Center waveform
+        float waveform_center = (max_amplitude + min_amplitude) / 2;
+
+        // Draw waveform
+        for (size_t i = 1; i < max_waveform_size; ++i) {
+            size_t index1 = (write_index + i - 1) % max_waveform_size; // Previous index in circular buffer
+            size_t index2 = (write_index + i) % max_waveform_size;     // Current index in circular buffer
+
+            //Get line points
+            int x1 = static_cast<int>((i - 1) * x_scale);
+            int y1 = SDL_clamp(static_cast<int>(height / 2 - (waveform_data[i - 1] - waveform_center) * y_scale), 0, height);
+            int x2 = static_cast<int>(i * x_scale);
+            int y2 = SDL_clamp(static_cast<int>(height / 2 - (waveform_data[i] - waveform_center) * y_scale), 0, height);
+
+            //Draw line
+            SDL_RenderDrawLine(renderer, x1, y1, x2, y2);
         }
-
-        SDL_RenderPresent(renderer); // Present the rendered frame
+        SDL_RenderPresent(renderer);
     }
 
-
     //Update stream
-    inline void SDLCALL __cdecl feed_audio_device_callback(void *userdata, Uint8* output_stream, int len) {
+    inline void SDLCALL __cdecl feed_audio_device_callback(void* userdata, Uint8* output_stream, int len) {
         //Gets more pro
-        SDL_AudioStream*input_stream = (SDL_AudioStream *) SDL_AtomicGetPtr((void**) &stream);
-        
+        Sound_Sample* sample = (Sound_Sample*)SDL_AtomicGetPtr((void**)&current_sample);
+
         //Fill with silence if no stream exists
-        if (input_stream == NULL) {
+        if (sample == NULL) {
             std::memset(output_stream, 0, len);
             return;
         }
 
-        const int num_converted_bytes = SDL_AudioStreamGet(input_stream, output_stream, len);
+        while (len > 0) {
+            if (sample_available == 0) {
+                const Uint32 br = Sound_Decode(sample);
+                //End of the current song.
+                if (br == 0 && !repeating) {
+                    Sound_FreeSample(current_sample);
+                    SDL_AtomicSetPtr((void**)&current_sample, NULL);
+                    sample_available = 0;
+                    sample_position = 0;
+                    //Write silence and clear waveform data after destroying audio
+                    std::memset(output_stream, 0, len);
+                    waveform_data.clear();
+                    write_index = 0;
+                    return;
+                }
+                else if (br == 0 && repeating) {
+                    Sound_Rewind(sample);
+                }
+                sample_available = br;
+                sample_position = 0;
+            }
 
-        if (num_converted_bytes > 0) {
-            const int num_samples = (num_converted_bytes / sizeof(float));
             float* samples = reinterpret_cast<float*>(output_stream);
+            const Uint32 cpy = SDL_min(sample_available, (Uint32)len);
+            SDL_assert(cpy > 0);
+            SDL_memcpy(samples, static_cast<const Uint8*>(sample->buffer) + sample_position, cpy);
 
-            /*TODO: rewrite waveform
-            // Add samples to waveform data
-            {
-                std::lock_guard<std::mutex> lock(waveform_mutex);   
-                size_t old_size = waveform_data.size();    
-                waveform_data.resize(old_size + num_samples); 
-                std::copy(samples, samples + num_samples, waveform_data.begin() + old_size);
-            }
-            */
+            const int num_samples = (int)(cpy / sizeof(float));
 
-            // Apply volume adjustment
-            for (int i = 0; i < num_samples; ++i)
+            // Apply volume adjustment & waveform visualisation
+            float max_value = *SDL_max(samples, samples + num_samples);
+
+            std::lock_guard<std::mutex> lock(waveform_data_mutex);
+
+            for (int i = 0; i < num_samples; ++i) {
                 samples[i] *= volume_slider_value;
+
+                // Store samples for waveform visualization
+                if (waveform_data.size() < max_waveform_size) {
+                    waveform_data.push_back(samples[i]);
+                }
+                else {
+                    // Shift left to make room for new samples
+                    waveform_data.erase(waveform_data.begin());
+                    waveform_data.push_back(samples[i]);
+                }
             }
 
-        len -= num_converted_bytes; //Has number of bytes left after feeding device
-        output_stream += num_converted_bytes;
+            //Update processeed samples
+            processed_samples += cpy / sizeof(float);
 
-        //fill with silence
-        if (len > 0)
-            std::memset(output_stream, 0, len);
-            //SDL_memset(output_stream, '\0', len);
+            //Chunk audio
+            len -= cpy;
+            output_stream += cpy;
+            sample_available -= cpy;
+            sample_position += cpy;
         }
     }
+}

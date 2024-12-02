@@ -26,12 +26,13 @@ class Window {
 		Window() {
 			window = SDL_CreateWindow("AudioVisualee",
 				SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-				screen_width, screen_height, 0);
+				screen_width, screen_height, SDL_WINDOW_HIDDEN);
 			renderer = SDL_CreateRenderer(window, -1, NULL); //SDL_RENDERER_PRESENTVSYNC);
 			//couldn't create renderer
 			if (!renderer) {
 				panic_and_abort("Renderer couldn't be created!", SDL_GetError());
 			}
+			SDL_ShowWindow(window);
 		}
 
 		//Render the screen

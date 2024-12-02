@@ -224,7 +224,7 @@
     <ClInclude Include="src\Components\ui.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="src\MainUI\FileButton.h">
+    <ClInclude Include="src\MainUI\RepeatButton.h">
       <Filter>Header Files\MainUI</Filter>
     </ClInclude>
     <ClInclude Include="src\MainUI\VolumeSlider.h">
@@ -286,6 +286,9 @@
     </ClInclude>
     <ClInclude Include="src\SDL_Sound\libmodplug\tables.h">
       <Filter>Header Files\SDL\libmodplug</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MainUI\SeekBar.h">
+      <Filter>Header Files\MainUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -6,11 +6,11 @@
 namespace AV {
 	class StopButton : public TextureButton {
 	public:
-		StopButton(int x, int y, int w, int h, std::string spriteSheetPath, int offsetX) : TextureButton{ x,y,w,h, "assets/Buttons.png", 320 -64 } {}
+		StopButton(int x, int y, int w, int h, std::string spriteSheetPath, int offsetX) : TextureButton{ x,y,w,h, "assets/Buttons.png", 256 } {}
 	protected:
 		void HandleLeftClick() override {
 			setFrame(2);
-			if (stream) {
+			if (current_sample) {
 				std::cout << "Stopping audio..." << std::endl;
 				stop_audio();
 			}

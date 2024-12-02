@@ -7,18 +7,25 @@
 using namespace AV;
 
 void startup(int argc, char* argv[]) {
-	//This breaks audio if removed lol
-	SDL_AudioSpec desired;
-
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_EVENTS) == -1) {
 		panic_and_abort("SDL_Init failed", SDL_GetError());
 	}
 
+	if (!Sound_Init()) {
+		panic_and_abort("Sound_Init failed", Sound_GetError());
+	}
+
+	//This breaks audio if removed lol
+	SDL_zero(desired);
 	desired.freq = 48000;
 	desired.format = AUDIO_F32;
 	desired.channels = 2;
 	desired.samples = 2048;
 	desired.callback = feed_audio_device_callback;
+
+	audio_device_spec.format = desired.format;
+	audio_device_spec.channels = desired.channels;
+	audio_device_spec.rate = desired.freq;
 
 	//Attempt to open up driver
 	audio_device = SDL_OpenAudioDevice(NULL, 0, &desired, NULL, 0);
@@ -68,9 +75,11 @@ int main(int argc, char* argv[]) {
 		window.Render();
 
 		ui.idk.setRotation(speed);
+		//If it exists, then we draw.
+		if (current_sample)
+			drawWaveform(renderer, window.getWidth(), window.getHeight());
 		ui.Render(window.GetRenderer());
-		//if (wavbuf != NULL)
-			//drawWaveform(renderer, samplePointer, *num_samplePointer);
+
 		window.Update();
 
 
@@ -82,14 +91,18 @@ int main(int argc, char* argv[]) {
 	}
 
 	//Clean up
-
-	SDL_FreeWAV(wavbuf);
-
 	SDL_CloseAudioDevice(audio_device);
+
+	if (current_sample) {
+		Sound_FreeSample(current_sample);
+		current_sample = NULL;
+	}
 
 	window.~Window();
 
 	TTF_Quit();
+
+	Sound_Quit();
 
 	SDL_Quit();
 
