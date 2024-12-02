@@ -65,7 +65,7 @@ namespace AV {
 
 		//TextureButton play{ 400, 335, 64, 64, "./assets/Buttons.png" };
 
-		//GRAY BAR...
+		//Bars
 		Rectangle bar{ 0, 330, 600, 70, {0, 0, 0, 150} };
 		Rectangle topbar{ 0, -20, 600, 70, {0, 0, 0, 150} };
 

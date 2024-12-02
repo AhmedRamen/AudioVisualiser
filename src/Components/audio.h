@@ -102,7 +102,7 @@ namespace AV {
         std::lock_guard<std::mutex> lock(waveform_data_mutex);
 
         // Set drawing color for waveform
-        SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255); // Green color for waveform
+        SDL_SetRenderDrawColor(renderer, 0, 255, 0, 155); // Green color for waveform
 
         // Calculate scaling factors
         float max_amplitude = *std::max_element(waveform_data.begin(), waveform_data.end());
