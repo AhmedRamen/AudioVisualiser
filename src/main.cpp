@@ -78,6 +78,7 @@ int main(int argc, char* argv[]) {
 		//If it exists, then we draw.
 		if (current_sample)
 			drawWaveform(renderer, window.getWidth(), window.getHeight());
+
 		ui.Render(window.GetRenderer());
 
 		window.Update();

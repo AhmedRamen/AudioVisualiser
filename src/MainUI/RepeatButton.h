@@ -11,7 +11,11 @@ namespace AV {
 
 	protected:
 		void HandleLeftClick() override {
-			repeating = repeating ? true : false;
+
+			if (!repeating) repeating = true;
+			else repeating = false;
+			setFrame(2); //Clicked
+			fprintf(stdout, "Repeating is now %d\n", repeating);
 		}
 	};
 }

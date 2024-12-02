@@ -52,7 +52,7 @@ class Window {
 		int getHeight() { return screen_height; }
 
 
-		//Clean up
+		//Clean up (this crashes randomly idk how or why does it happen)
 		~Window() {
 			SDL_DestroyRenderer(renderer);
 			SDL_DestroyWindow(window);
